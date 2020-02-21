@@ -1,32 +1,8 @@
-pipeline {
-    agent any
-
-    stages {
-        stage ('Compile Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn clean install'
-                }
-            }
-        }
-
-        stage ('Testing Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-        stage('Generate HTML report') {
-            steps {
-                cucumber buildStatus: "UNSTABLE",
-                        fileIncludePattern: '**/cucumber.json',
-                        jsonReportDirectory: 'target'
-            }
-
-        }
+node{
+    stage('SOM Checkout'){
+        git 'https://github.com/shivamrai268/jenkins-example'
+    }
+    stage('Compile-Package'){
+        def mvnHome = tool name: 'Maven', type: 'maven'
     }
 }
